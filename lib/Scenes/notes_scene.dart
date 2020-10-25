@@ -1,14 +1,17 @@
 import 'package:everpobre/domain/notebook.dart';
 import 'package:everpobre/domain/note.dart';
 import 'package:flutter/material.dart';
+import 'package:everpobre/domain/notebooks.dart';
+import 'package:everpobre/Scenes/notebooks_scene.dart';
 import 'package:intl/intl.dart';
 
 class NotesListView extends StatefulWidget {
-  BuildContext _context; 
   final Notebook _model;
+  final Notebooks notebooks;
   static String routeName = 'NotesList';
-  NotesListView(BuildContext context) : _model = ModalRoute.of(context).settings.arguments as Notebook;
-
+  NotesListView(BuildContext context) : _model = (ModalRoute.of(context).settings.arguments as NotesArguments).notebook
+  , notebooks = (ModalRoute.of(context).settings.arguments as NotesArguments).notebooks;
+  
   @override
   _NotesListViewState createState() => _NotesListViewState();
 }
@@ -21,12 +24,14 @@ class _NotesListViewState extends State<NotesListView> {
   @override
   void didChangeDependencies() {
     widget._model.addListener(modelDidChange);
+    widget.notebooks.addListener(modelDidChange);
     super.didChangeDependencies();
   }
 
   @override
   void dispose() {
     widget._model.removeListener(modelDidChange);
+    widget.notebooks.removeListener(modelDidChange);
     super.dispose();
   }
 
@@ -45,6 +50,7 @@ class _NotesListViewState extends State<NotesListView> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           widget._model.add(Note("New note"));
+          modelDidChange();
         },
         child: const Icon(Icons.add),
       ),
@@ -74,13 +80,12 @@ class _NoteSliverState extends State<NoteSliver> {
       key: UniqueKey(),
       onDismissed: (direction) {
         widget.notebook.removeAt(widget.index);
-
+        setState(() {});
         Scaffold.of(context).showSnackBar(
           const SnackBar(
             content: Text("Note has been deleted!"),
           ),
         );
-        setState(() {});
       },
       background: Container(
         color: Colors.red,

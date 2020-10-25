@@ -17,6 +17,7 @@ class TreeBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: TextResources.appName,
       routes: {
         NotebooksListView.routeName: (context) => NotebooksListView(notebooksModel), 
         NotesListView.routeName: (context) => NotesListView(context),
@@ -26,19 +27,7 @@ class TreeBuilder extends StatelessWidget {
         primaryColor: const Color(0xFF388E3C),
         accentColor: const Color(0xFFFFC107),
       ),
-      title: TextResources.appName,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(TextResources.appName),
-        ),
-        body: NotebooksListView(notebooksModel),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            notebooksModel.add(Notebook('Nuevo notebook'));
-          },
-          child: const Icon(Icons.add),
-        ),
-      ),
-    );
+      home: NotebooksListView(notebooksModel),
+      );
   }
 }

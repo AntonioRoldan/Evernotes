@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:everpobre/Scenes/notes_scene.dart';
 import 'package:flutter/material.dart';
 import 'package:everpobre/domain/notebooks.dart';
+import 'package:everpobre/text_resources.dart';
 import 'package:everpobre/domain/notebook.dart';
 class Message {
   final String content;
@@ -8,6 +11,11 @@ class Message {
   Message(String newValue) : content = newValue;
 }
 
+class NotesArguments {
+  Notebooks notebooks;
+  Notebook notebook;
+  NotesArguments(this.notebooks, this.notebook);
+}
 
 class NotebooksListView extends StatefulWidget {
   static const routeName = '/NotebooksList';
@@ -39,18 +47,22 @@ class _NotebooksListViewState extends State<NotebooksListView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(TextResources.appName)
+      ),
       body: ListView.builder(
         itemCount: widget._model.length,
         itemBuilder: (context, index) {
           return NotebookSliver(widget._model, index);
         },
-      ),
+      ), 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           widget._model.add(Notebook("New notebook"));
+          setState(() {});
         },
-        child: const Icon(Icons.add),
-      )
+        child: const Icon(Icons.add)
+      ),
     );
   }
 }
@@ -68,6 +80,13 @@ class NotebookSliver extends StatefulWidget {
 }
 
 class _NotebookSliverState extends State<NotebookSliver> {
+
+  FutureOr onGoBack() {
+    setState(() {});
+  }
+  void _setStateUponReturningFromScreen(BuildContext context) async {
+
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -75,12 +94,12 @@ class _NotebookSliverState extends State<NotebookSliver> {
       key: UniqueKey(),
       onDismissed: (direction) {
         widget.notebooks.removeAt(widget.index);
+        setState(() {});
         Scaffold.of(context).showSnackBar(
           const SnackBar(
             content: Text("Notebook has been deleted!"),
           ),
         );
-        setState(() {});
       },
       background: Container(
         color: Colors.red,
@@ -91,10 +110,12 @@ class _NotebookSliverState extends State<NotebookSliver> {
           title: Text(widget.notebooks[widget.index].title),
           subtitle:
               Text(widget.notebooks[widget.index].toString()),
-          onTap: () { 
-            Navigator.pushNamed(context, NotesListView.routeName, arguments: 
-              widget.notebooks[widget.index]
+          onTap: () async { 
+            await Navigator.pushNamed(context, NotesListView.routeName, arguments: 
+              NotesArguments(widget.notebooks, widget.notebooks[widget.index])
             );
+            print("whaat");
+            setState(() {});
           }
         ),
       ),

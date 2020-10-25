@@ -42,7 +42,7 @@ class Notebooks with ChangeNotifier {
 
   @override
   String toString() {
-    return "<$runtimeType: $length notebooks>";
+    return "$runtimeType: $length notebooks";
   }
 
   @override

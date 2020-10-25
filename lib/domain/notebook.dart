@@ -44,6 +44,6 @@ class Notebook with ChangeNotifier {
   // Object Protocol
   @override
   String toString() {
-    return "<$runtimeType: $length notes>";
+    return "$runtimeType: $length notes";
   }
 }
