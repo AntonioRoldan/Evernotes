@@ -10,6 +10,8 @@ class Notebooks with ChangeNotifier {
 
   int get length => _notebooks.length;
 
+  String title = "Notebooks";
+
   Notebooks();
 
   Notebooks.testDataBuilder() {

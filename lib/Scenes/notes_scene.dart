@@ -1,4 +1,5 @@
 import 'package:everpobre/domain/notebook.dart';
+import 'package:everpobre/domain/note.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -40,6 +41,12 @@ class _NotesListViewState extends State<NotesListView> {
         itemBuilder: (context, index) {
           return NoteSliver(widget._model, index);
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          widget._model.add(Note("New note"));
+        },
+        child: const Icon(Icons.add),
       ),
 
     );

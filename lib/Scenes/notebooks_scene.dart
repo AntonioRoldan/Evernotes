@@ -1,7 +1,7 @@
 import 'package:everpobre/Scenes/notes_scene.dart';
 import 'package:flutter/material.dart';
 import 'package:everpobre/domain/notebooks.dart';
-
+import 'package:everpobre/domain/notebook.dart';
 class Message {
   final String content;
 
@@ -38,12 +38,19 @@ class _NotebooksListViewState extends State<NotebooksListView> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget._model.length,
-      itemBuilder: (context, index) {
-        return NotebookSliver(widget._model, index);
-      },
-      
+    return Scaffold(
+      body: ListView.builder(
+        itemCount: widget._model.length,
+        itemBuilder: (context, index) {
+          return NotebookSliver(widget._model, index);
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          widget._model.add(Notebook("New notebook"));
+        },
+        child: const Icon(Icons.add),
+      )
     );
   }
 }
@@ -68,7 +75,6 @@ class _NotebookSliverState extends State<NotebookSliver> {
       key: UniqueKey(),
       onDismissed: (direction) {
         widget.notebooks.removeAt(widget.index);
-
         Scaffold.of(context).showSnackBar(
           const SnackBar(
             content: Text("Notebook has been deleted!"),
